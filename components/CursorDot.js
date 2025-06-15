@@ -45,7 +45,7 @@ const CursorDot = () => {
 
         // 动画循环：延迟更新小白点位置
         const updateDotPosition = () => {
-            const damping = 0.2; // 阻尼系数，值越小延迟越明显
+            const damping = 1; // 阻尼系数，值为1时无延迟
             dotPos.x += (mouse.x - dotPos.x) * damping;
             dotPos.y += (mouse.y - dotPos.y) * damping;
 
@@ -93,11 +93,10 @@ const CursorDot = () => {
             }
 
             .cursor-dot-hover {
-                border: 2px solid rgba(255, 255, 255, 0.3); /* 更明显的白色边框 */
-                width: 50px; /* 适当调整放大尺寸 */
-                height: 50px; /* 适当调整放大尺寸 */
-                background: rgba(255, 255, 255, 0.15); /* 略微提高不透明度 */
-                box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* 添加柔和发光效果 */
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                width: 60px;
+                height: 60px;
+                background: rgba(255, 255, 255, 0.1);
             }
 
             .dark .cursor-dot-hover {
