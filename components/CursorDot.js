@@ -75,6 +75,10 @@ const CursorDot = () => {
 
     return (
         <style jsx global>{`
+            * {
+                cursor: none !important;
+            }
+            
             .cursor-dot {
                 position: fixed;
                 width: 12px;
@@ -89,12 +93,11 @@ const CursorDot = () => {
             }
 
             .cursor-dot-hover {
-                border: 1px solid rgba(167, 167, 167, 0.14); /* 鼠标悬停时的深灰色边框，厚度为1px */
-                width: 60px; /* 放大 */
-                height: 60px; /* 放大 */
-                background: hsla(0, 0%, 100%, 0.04); /* 半透明背景 */
-                -webkit-backdrop-filter: blur(5px); /* 毛玻璃效果 */
-                backdrop-filter: blur(5px);
+                border: 2px solid rgba(255, 255, 255, 0.3); /* 更明显的白色边框 */
+                width: 50px; /* 适当调整放大尺寸 */
+                height: 50px; /* 适当调整放大尺寸 */
+                background: rgba(255, 255, 255, 0.15); /* 略微提高不透明度 */
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* 添加柔和发光效果 */
             }
 
             .dark .cursor-dot-hover {
