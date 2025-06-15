@@ -61,7 +61,7 @@ const LayoutBase = props => {
 
     return (
         <div
-            id='theme-proxio'
+            id='theme-heoo'
             className={`${siteConfig('FONT_STYLE')} min-h-screen flex flex-col dark:bg-dark scroll-smooth`}>
             <Style />
             {/* 页头 */}
