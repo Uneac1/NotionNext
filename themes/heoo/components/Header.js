@@ -66,7 +66,7 @@ const Header = props => {
     }
   }, [])
 
-  // 导航栏根据滚动轮播菜单内容
+  // 导航栏根据滚动显示标题
   useEffect(() => {
     let prevScrollY = 0
     let ticking = false
@@ -75,10 +75,10 @@ const Header = props => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY
-          if (currentScrollY > prevScrollY) {
-            setActiveIndex(1) // 向下滚动时设置activeIndex为1
+          if (currentScrollY > 100) { // 滚动超过100px时显示标题
+            document.title = 'Uneace | 休恋逝水'
           } else {
-            setActiveIndex(0) // 向上滚动时设置activeIndex为0
+            document.title = siteConfig('TITLE')
           }
           prevScrollY = currentScrollY
           ticking = false
