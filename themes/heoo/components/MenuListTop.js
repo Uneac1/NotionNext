@@ -10,24 +10,24 @@ export const MenuListTop = props => {
   let links = [
     {
       id: 1,
-      icon: 'fa-solid fa-house',
-      name: locale.NAV.INDEX,
-      href: '/',
-      show: siteConfig('HEO_MENU_INDEX', null, CONFIG)
+      icon: 'fas fa-tag',
+      name: '文章标签',
+      href: '/tag',
+      show: true
     },
     {
       id: 2,
-      icon: 'fas fa-search',
-      name: locale.NAV.SEARCH,
-      href: '/search',
-      show: siteConfig('HEO_MENU_SEARCH', null, CONFIG)
+      icon: 'fas fa-archive',
+      name: '历史归档',
+      href: '/archive',
+      show: true
     },
     {
       id: 3,
-      icon: 'fas fa-archive',
-      name: locale.NAV.ARCHIVE,
-      href: '/archive',
-      show: siteConfig('HEO_MENU_ARCHIVE', null, CONFIG)
+      icon: 'fas fa-link',
+      name: '友情链接',
+      href: '/links',
+      show: true
     }
   ]
 
@@ -48,7 +48,7 @@ export const MenuListTop = props => {
     <>
       <nav
         id='nav-mobile'
-        className='leading-8 justify-center font-light w-full flex'>
+        className='leading-8 justify-center font-light w-full flex items-center space-x-4'>
         {links?.map(
           (link, index) =>
             link && link.show && <MenuItemDrop key={index} link={link} />
