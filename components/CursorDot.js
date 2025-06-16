@@ -41,7 +41,7 @@ const CursorDot = () => {
                 el.addEventListener('mouseenter', handleMouseEnter);
                 el.addEventListener('mouseleave', handleMouseLeave);
             });
-        }, 200); // 延时 200ms 执行
+        }, 0); // 延时 200ms 执行
 
         // 动画循环：延迟更新小白点位置
         const updateDotPosition = () => {
