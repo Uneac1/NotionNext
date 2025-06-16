@@ -93,8 +93,8 @@ const CursorDot = () => {
                 width: 60px; /* 放大 */
                 height: 60px; /* 放大 */
                 background: hsla(0, 0%, 100%, 0.04); /* 半透明背景 */
-                -webkit-backdrop-filter: blur(5px); /* 毛玻璃效果 */
-                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(2px); /* 毛玻璃效果 */
+                backdrop-filter: blur(2px);
                 filter: invert(1); /* 反转颜色 */
             }
 
