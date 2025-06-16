@@ -95,10 +95,12 @@ const CursorDot = () => {
                 background: hsla(0, 0%, 100%, 0.04); /* 半透明背景 */
                 -webkit-backdrop-filter: blur(5px); /* 毛玻璃效果 */
                 backdrop-filter: blur(5px);
+                filter: invert(1); /* 反转颜色 */
             }
 
             .dark .cursor-dot-hover {
                 border: 1px solid rgba(66, 66, 66, 0.66); /* 鼠标悬停时的深灰色边框，厚度为1px */
+                filter: invert(1); /* 在黑暗模式下保持颜色反转 */
             }
         `}</style>
     );
