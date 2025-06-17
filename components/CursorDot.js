@@ -87,14 +87,14 @@ const CursorDot = () => {
                 pointer-events: none;
                 transform: translate(-50%, -50%);
                 z-index: 9999;
-                transition: transform 100ms ease-out, width 200ms ease, height 200ms ease, border 200ms ease; /* 添加尺寸和边框平滑过渡 */
+                transition: transform 100ms ease-out, width 2000ms ease, height 2000ms ease, border 2000ms ease; /* 添加尺寸和边框平滑过渡 */
                 mix-blend-mode: difference; /* 可选：增强对比度 */
             }
 
             .cursor-dot-hover {
                 border: 1px solid rgba(167, 167, 167, 0.14); /* 鼠标悬停时的深灰色边框，厚度为1px */
-                width: 60px; /* 放大 */
-                height: 60px; /* 放大 */
+                width: 900px; /* 放大 */
+                height: 900px; /* 放大 */
                 background: hsla(0, 0%, 100%, 0.04); /* 半透明背景 */
                 -webkit-backdrop-filter: blur(2px); /* 毛玻璃效果 */
                 backdrop-filter: blur(2px);
