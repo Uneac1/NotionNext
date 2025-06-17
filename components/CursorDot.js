@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 const CursorDot = () => {
-  const [isFullscreenMode, setIsFullscreenMode] = useState(false);
   const [isShrinking, setIsShrinking] = useState(false);
 
   useEffect(() => {
@@ -17,10 +16,12 @@ const CursorDot = () => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
     };
+
     const handleMouseDown = () => {
       isMouseDown = true;
-      dot.classList.add('cursor-dot-hover'); // 放大白点（全屏状态触发前的视觉效果）
+      dot.classList.add('cursor-dot-hover'); // 放大圆点
     };
+
     const handleMouseUp = () => {
       isMouseDown = false;
       dot.classList.remove('cursor-dot-hover');
@@ -41,13 +42,8 @@ const CursorDot = () => {
       const pageSize = Math.max(window.innerWidth, window.innerHeight);
       const dotSize = Math.max(dot.offsetWidth, dot.offsetHeight);
 
-      // 当鼠标按下且点尺寸覆盖屏幕，进入全屏模式
-      if (isMouseDown && dotSize >= pageSize && !isFullscreenMode) {
-        setIsFullscreenMode(true);
-      }
-
-      // 如果处于全屏模式且还没开始收缩，启动收缩动画
-      if (isFullscreenMode && !isShrinking) {
+      // 当圆点尺寸大于或等于页面尺寸时，触发收缩动画
+      if (isMouseDown && dotSize >= pageSize && !isShrinking) {
         setIsShrinking(true);
       }
 
@@ -62,20 +58,9 @@ const CursorDot = () => {
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.removeChild(dot);
     };
-  }, [isFullscreenMode, isShrinking]);
+  }, [isShrinking]);
 
-  // 全屏模式时更新样式
-  useEffect(() => {
-    if (isFullscreenMode) {
-      const dot = document.querySelector('.cursor-dot');
-      if (!dot) return;
-      dot.classList.remove('cursor-dot-hover');
-      dot.classList.add('cursor-dot-fullscreen');
-      dot.style.backgroundColor = document.body.classList.contains('dark') ? 'black' : 'white';
-    }
-  }, [isFullscreenMode]);
-
-  // 收缩动画启动后执行恢复初始状态
+  // 收缩动画启动后恢复初始状态
   useEffect(() => {
     if (isShrinking) {
       const dot = document.querySelector('.cursor-dot');
@@ -89,8 +74,7 @@ const CursorDot = () => {
 
       // 收缩结束后重置状态
       const timer = setTimeout(() => {
-        setIsFullscreenMode(false);
-        setIsShrinking(false);
+        setIsShrinking(false); // 恢复收缩状态
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -118,11 +102,6 @@ const CursorDot = () => {
         background: hsla(0, 0%, 100%, 0.04);
         backdrop-filter: blur(2px);
         filter: invert(1);
-      }
-      .cursor-dot-fullscreen {
-        width: 30px;
-        height: 30px;
-        background: rgba(0, 0, 0, 0.8);
       }
     `}</style>
   );
