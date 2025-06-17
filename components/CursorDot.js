@@ -1,124 +1,74 @@
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-/**
- * 白点鼠标跟随
- * @returns 
- */
-const CursorDot = () => {
-    const router = useRouter();
-    const [isDark, setIsDark] = useState(false);
-    const [scale, setScale] = useState(1);
-    const [isPressed, setIsPressed] = useState(false);
 
+const CursorDot = () => {
+    const [isFullscreenMode, setIsFullscreenMode] = useState(false);
+    
     useEffect(() => {
-        // 创建小白点元素
         const dot = document.createElement('div');
         dot.classList.add('cursor-dot');
         document.body.appendChild(dot);
 
-        // 鼠标坐标和缓动目标坐标
-        let mouse = { x: -100, y: -100 }; // 初始位置在屏幕外
+        let mouse = { x: -100, y: -100 };
         let dotPos = { x: mouse.x, y: mouse.y };
-        let pressStartTime = 0;
-        let scaleAnimationFrame = null;
+        let isMouseDown = false;
 
-        // 监听鼠标移动
-        const handleMouseMove = (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        };
+        const handleMouseMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+        const handleMouseDown = () => { isMouseDown = true; dot.classList.add('cursor-dot-hover'); };
+        const handleMouseUp = () => { isMouseDown = false; dot.classList.remove('cursor-dot-hover'); };
+        
         document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mousedown', handleMouseDown);
+        document.addEventListener('mouseup', handleMouseUp);
 
-        // 监听鼠标按下和松开事件
-        const handleMouseDown = () => {
-            setIsPressed(true);
-            pressStartTime = Date.now();
-            startScaleAnimation();
-        };
-
-        const handleMouseUp = () => {
-            setIsPressed(false);
-            if (scale >= 30) { // 如果放大到一定程度，切换主题
-                setIsDark(!isDark);
-                document.documentElement.classList.toggle('dark');
-            }
-            stopScaleAnimation();
-        };
-
-        const startScaleAnimation = () => {
-            let startScale = scale;
-            const animate = () => {
-                if (!isPressed) {
-                    if (scale > 1) {
-                        setScale(prev => Math.max(1, prev - 0.5)); // 缓慢缩小
-                        scaleAnimationFrame = requestAnimationFrame(animate);
-                    }
-                    return;
-                }
-                const elapsed = Date.now() - pressStartTime;
-                const newScale = Math.min(40, startScale + (elapsed / 1000) * 5); // 5秒内放大到最大
-                setScale(newScale);
-                scaleAnimationFrame = requestAnimationFrame(animate);
-            };
-            scaleAnimationFrame = requestAnimationFrame(animate);
-        };
-
-        const stopScaleAnimation = () => {
-            if (scaleAnimationFrame) {
-                cancelAnimationFrame(scaleAnimationFrame);
-            }
-        };
-
-        // 动画循环：延迟更新小白点位置
         const updateDotPosition = () => {
-            const damping = 0.5; // 阻尼系数，值越小延迟越明显
+            const damping = 0.5;
             dotPos.x += (mouse.x - dotPos.x) * damping;
             dotPos.y += (mouse.y - dotPos.y) * damping;
-
-            // 更新DOM
             dot.style.left = `${dotPos.x}px`;
             dot.style.top = `${dotPos.y}px`;
-            dot.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+            const pageSize = Math.max(window.innerWidth, window.innerHeight);
+            const dotSize = Math.max(dot.offsetWidth, dot.offsetHeight);
+            if (isMouseDown && dotSize >= pageSize && !isFullscreenMode) {
+                setIsFullscreenMode(true);
+            }
 
             requestAnimationFrame(updateDotPosition);
         };
 
-        // 启动动画
         updateDotPosition();
 
-        // 添加全局鼠标事件监听
-        document.addEventListener('mousedown', handleMouseDown);
-        document.addEventListener('mouseup', handleMouseUp);
-
-        // 清理函数
         return () => {
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mousedown', handleMouseDown);
             document.removeEventListener('mouseup', handleMouseUp);
-            if (scaleAnimationFrame) {
-                cancelAnimationFrame(scaleAnimationFrame);
-            }
             document.body.removeChild(dot);
         };
-    }, [router, isPressed, isDark, scale]);
+    }, [isFullscreenMode]);
+
+    useEffect(() => {
+        if (isFullscreenMode) {
+            const dot = document.querySelector('.cursor-dot');
+            dot.classList.remove('cursor-dot-hover');
+            dot.classList.add('cursor-dot-fullscreen');
+            dot.style.backgroundColor = document.body.classList.contains('dark') ? 'black' : 'white';
+        }
+    }, [isFullscreenMode]);
 
     return (
         <style jsx global>{`
             .cursor-dot {
-                position: fixed;
-                width: 12px;
-                height: 12px;
-                background: ${isDark ? 'black' : 'white'};
-                border-radius: 50%;
-                pointer-events: none;
-                transform: translate(-50%, -50%) scale(1);
-                z-index: 9999;
-                transition: background-color 300ms ease;
-                mix-blend-mode: ${scale >= 30 ? 'normal' : 'difference'};
+                position: fixed; width: 12px; height: 12px; background: white; border-radius: 50%;
+                pointer-events: none; transform: translate(-50%, -50%); z-index: 9999;
+                transition: transform 100ms, width 200ms, height 200ms, border 200ms;
+                mix-blend-mode: difference;
             }
-
-            .dark .cursor-dot {
-                background: ${isDark ? 'white' : 'black'};
+            .cursor-dot-hover {
+                border: 1px solid rgba(167, 167, 167, 0.14); width: 9999px; height: 9999px;
+                background: hsla(0, 0%, 100%, 0.04); backdrop-filter: blur(2px); filter: invert(1);
+            }
+            .cursor-dot-fullscreen {
+                width: 30px; height: 30px; background: rgba(0, 0, 0, 0.8);
             }
         `}</style>
     );
