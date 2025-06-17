@@ -5,7 +5,11 @@ const CursorDot = () => {
   const mousePos = useRef({ x: -100, y: -100 });
   const isMouseDown = useRef(false);
   const isShrinking = useRef(false);
-  const damping = useRef(0.2);  // 可调节的平滑度参数
+  const damping = useRef(0.2); // 可调节的平滑度参数
+
+  // 设置圆点尺寸变化的最大值
+  const maxDotSize = useRef(0);
+  const modeChanged = useRef(false); // 用于检测是否已经切换模式
 
   useEffect(() => {
     const dot = dotRef.current;
@@ -21,7 +25,7 @@ const CursorDot = () => {
     const handleMouseDown = () => {
       if (!isMouseDown.current) {
         isMouseDown.current = true;
-        isShrinking.current = false;  // 重置收缩状态，允许重复触发
+        isShrinking.current = false;
         dot.classList.add('cursor-dot-hover');
         dot.classList.remove('cursor-dot-shrink');
       }
@@ -32,16 +36,28 @@ const CursorDot = () => {
       if (isMouseDown.current) {
         isMouseDown.current = false;
         dot.classList.remove('cursor-dot-hover');
-        dot.classList.remove('cursor-dot-shrink');
-        isShrinking.current = false;
+        dot.classList.add('cursor-dot-shrink');
+        isShrinking.current = true;
       }
     };
 
+    // 切换模式（例如鼠标进入不同元素时）
+    const handleModeChange = () => {
+      if (!isMouseDown.current) {
+        dot.classList.remove('cursor-dot-hover');
+        dot.classList.add('cursor-dot-shrink');
+        isShrinking.current = true;
+        modeChanged.current = true; // 标记模式已切换
+      }
+    };
+
+    // 添加事件监听
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mouseenter', handleModeChange); // 模式切换时触发
 
-    // 更新圆点位置及动画状态
+    // 动画循环更新圆点的位置
     const updateDot = () => {
       if (!dot) return;
 
@@ -55,27 +71,41 @@ const CursorDot = () => {
       dot.style.left = `${nextLeft}px`;
       dot.style.top = `${nextTop}px`;
 
-      // 判断是否需要触发收缩动画
+      // 获取页面最大尺寸
       const pageMaxSize = Math.max(window.innerWidth, window.innerHeight);
-      const dotSize = Math.max(dot.offsetWidth, dot.offsetHeight);
+      maxDotSize.current = pageMaxSize * 2; // 设置最大放大尺寸为2倍页面大小
 
-      if (isMouseDown.current && dot.classList.contains('cursor-dot-hover')) {
-        if (dotSize >= pageMaxSize && !isShrinking.current) {
-          isShrinking.current = true;
-          dot.classList.add('cursor-dot-shrink');
-          dot.classList.remove('cursor-dot-hover');
-        }
+      // 放大至2倍页面大小
+      if (isMouseDown.current && !isShrinking.current) {
+        dot.style.width = `${maxDotSize.current}px`;
+        dot.style.height = `${maxDotSize.current}px`;
       }
 
+      // 判断是否触发收缩动画
+      const dotSize = Math.max(dot.offsetWidth, dot.offsetHeight);
+      if (dotSize >= maxDotSize.current && !isShrinking.current) {
+        isShrinking.current = true;
+        dot.classList.add('cursor-dot-shrink');
+        dot.classList.remove('cursor-dot-hover');
+      }
+
+      // 如果圆点达到2倍页面大小，切换模式
+      if (dotSize >= maxDotSize.current && !modeChanged.current) {
+        handleModeChange(); // 自动切换模式
+      }
+
+      // 请求动画帧，确保平滑过渡
       requestAnimationFrame(updateDot);
     };
 
     updateDot();
 
+    // 清理事件监听
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mouseenter', handleModeChange);
     };
   }, []);
 
