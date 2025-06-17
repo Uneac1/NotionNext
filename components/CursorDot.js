@@ -11,8 +11,8 @@ const CursorDot = () => {
     const dot = dotRef.current;
     const updateDot = () => {
       const { x, y } = mousePos.current;
-      const pageMaxSize = Math.max(window.innerWidth, window.innerHeight);
-      maxDotSize.current = pageMaxSize * 5; // 改为5倍页面尺寸
+      const pageMaxSize = Math.min(window.innerWidth, window.innerHeight);
+      maxDotSize.current = pageMaxSize * 5; // 5倍页面大小
 
       dot.style.left = `${x}px`;
       dot.style.top = `${y}px`;
@@ -51,7 +51,39 @@ const CursorDot = () => {
   }, []);
 
   return (
-    <div ref={dotRef} className="cursor-dot" />
+    <>
+      <div ref={dotRef} className="cursor-dot" />
+      <style jsx global>{`
+        .cursor-dot {
+          position: fixed;
+          width: 12px;
+          height: 12px;
+          background: white;
+          border-radius: 50%;
+          pointer-events: none;
+          transform: translate(-50%, -50%);
+          z-index: 9999;
+          transition: transform 100ms ease, width 2000ms ease, height 2000ms ease;
+          mix-blend-mode: difference;
+          left: -100px;
+          top: -100px;
+        }
+        .cursor-dot-hover {
+          width: 100vw !important;
+          height: 100vh !important;
+          background: hsla(0, 0%, 100%, 0.04) !important;
+          backdrop-filter: blur(2px) !important;
+          filter: invert(1) !important;
+          border: 1px solid rgba(167, 167, 167, 0.14) !important;
+        }
+        .cursor-dot-shrink {
+          width: 12px !important;
+          height: 12px !important;
+          background-color: white !important;
+          border: none !important;
+        }
+      `}</style>
+    </>
   );
 };
 
