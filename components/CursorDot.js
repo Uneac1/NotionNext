@@ -1,87 +1,108 @@
-import { useEffect, useRef } from 'react';
-
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+/**
+ * 白点鼠标跟随
+ * @returns 
+ */
 const CursorDot = () => {
-  const dotRef = useRef(null);
-  const mousePos = useRef({ x: -100, y: -100 });
-  const isMouseDown = useRef(false);
-  const maxDotSize = useRef(0); // 用于存储最大圆点尺寸
+    const router = useRouter();
+    useEffect(() => {
+        // 创建小白点元素
+        const dot = document.createElement('div');
+        dot.classList.add('cursor-dot');
+        document.body.appendChild(dot);
 
-  useEffect(() => {
-    const dot = dotRef.current;
+        // 鼠标坐标和缓动目标坐标
+        let mouse = { x: -100, y: -100 }; // 初始位置在屏幕外
+        let dotPos = { x: mouse.x, y: mouse.y };
 
-    // 更新圆点位置并处理大小和动画
-    const updateDot = () => {
-      const { x, y } = mousePos.current;
-      const pageMaxSize = Math.max(window.innerWidth, window.innerHeight); // 页面最大尺寸
-      maxDotSize.current = pageMaxSize * 5; // 设置最大圆点尺寸为页面大小的5倍
+        // 监听鼠标移动
+        const handleMouseMove = (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        };
+        document.addEventListener('mousemove', handleMouseMove);
 
-      // 根据鼠标位置更新圆点位置
-      dot.style.left = `${x}px`;
-      dot.style.top = `${y}px`;
+        // 监听鼠标悬停和按压事件
+        const handleMouseEnter = () => {
+            dot.classList.add('cursor-dot-hover'); // 添加放大样式
+        };
+        const handleMouseLeave = () => {
+            dot.classList.remove('cursor-dot-hover'); // 移除放大样式
+        };
 
-      // 如果按下鼠标，放大圆点，否则恢复原始尺寸
-      if (isMouseDown.current) {
-        // 按下鼠标时，圆点放大到最大尺寸
-        dot.style.width = `${maxDotSize.current}px`;
-        dot.style.height = `${maxDotSize.current}px`;
-      } else {
-        // 松开鼠标时，恢复圆点原始尺寸
-        dot.style.width = '12px';
-        dot.style.height = '12px';
-      }
+        // 为所有可点击元素和包含 hover 或 group-hover 类名的元素添加事件监听
+        setTimeout(() => {
+            const clickableElements = document.querySelectorAll(
+                'a, button, [role="button"], [onclick], [cursor="pointer"], [class*="hover"], [class*="group-hover"], [class*="cursor-pointer"]'
+            );
+            clickableElements.forEach((el) => {
+                el.addEventListener('mouseenter', handleMouseEnter);
+                el.addEventListener('mouseleave', handleMouseLeave);
+            });
+        }, 0); // 延时 200ms 执行
 
-      requestAnimationFrame(updateDot); // 不断更新圆点位置和尺寸
-    };
+        // 动画循环：延迟更新小白点位置
+        const updateDotPosition = () => {
+            const damping = 0.5; // 阻尼系数，值越小延迟越明显
+            dotPos.x += (mouse.x - dotPos.x) * damping;
+            dotPos.y += (mouse.y - dotPos.y) * damping;
 
-    const handleMouseMove = (e) => {
-      mousePos.current = { x: e.clientX, y: e.clientY }; // 记录鼠标位置
-    };
+            // 更新DOM
+            dot.style.left = `${dotPos.x}px`;
+            dot.style.top = `${dotPos.y}px`;
 
-    const handleMouseDown = () => {
-      isMouseDown.current = true; // 设置鼠标按下状态
-    };
+            requestAnimationFrame(updateDotPosition);
+        };
 
-    const handleMouseUp = () => {
-      isMouseDown.current = false; // 设置鼠标松开状态
-    };
+        // 启动动画
+        updateDotPosition();
 
-    // 绑定事件监听
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
+        // 清理函数
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            const clickableElements = document.querySelectorAll(
+                'a, button, [role="button"], [onclick], [cursor="pointer"], [class*="hover"], [class*="group-hover"], [class*="cursor-pointer"]'
+            );
+            clickableElements.forEach((el) => {
+                el.removeEventListener('mouseenter', handleMouseEnter);
+                el.removeEventListener('mouseleave', handleMouseLeave);
+            });
+            document.body.removeChild(dot);
+        };
+    }, [router]);
 
-    // 启动更新循环
-    updateDot();
+    return (
+        <style jsx global>{`
+            .cursor-dot {
+                position: fixed;
+                width: 12px;
+                height: 12px;
+                background: white;
+                border-radius: 50%;
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+                z-index: 9999;
+                 transition: transform 100ms ease-out, width 200ms ease, height 200ms ease, border 200ms ease; /* 添加尺寸和边框平滑过渡 */
+                mix-blend-mode: difference; /* 可选：增强对比度 */
+            }
 
-    // 清理事件监听
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, []);
-
-  return (
-    <>
-      <div ref={dotRef} className="cursor-dot" />
-      <style jsx global>{`
-        .cursor-dot {
-          position: fixed;
-          width: 12px;
-          height: 12px;
-          background: white;
-          border-radius: 50%;
-          pointer-events: none;
-          transform: translate(-50%, -50%);
-          z-index: 9999;
-          transition: width 0.2s ease, height 0.2s ease; /* 平滑过渡 */
-          mix-blend-mode: difference;
-          left: -100px;
-          top: -100px;
-        }
-      `}</style>
-    </>
-  );
+            .cursor-dot-hover {
+                border: 1px solid rgba(167, 167, 167, 0.14); /* 鼠标悬停时的深灰色边框，厚度为1px */
+                width: 60px; /* 放大 */
+                height: 60px; /* 放大 */
+                background: hsla(0, 0%, 100%, 0.04); /* 半透明背景 */
+                -webkit-backdrop-filter: blur(2px); /* 毛玻璃效果 */
+                backdrop-filter: blur(2px);
+                filter: invert(1); /* 反转颜色 */
+            }
+  
+            .dark .cursor-dot-hover {
+                border: 1px solid rgba(66, 66, 66, 0.66); /* 鼠标悬停时的深灰色边框，厚度为1px */
+                filter: invert(1); /* 在黑暗模式下保持颜色反转 */
+            }
+        `}</style>
+    );
 };
 
 export default CursorDot;
