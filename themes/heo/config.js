@@ -54,6 +54,7 @@ const CONFIG = {
   HEO_INFO_CARD_URL2: 'https://github.com/tangly1024',
   HEO_INFO_CARD_ICON2: 'fab fa-github',
   HEO_INFO_CARD_URL3: 'https://y130.icu',
+  link.target = '_blank'; // 设置为在新标签页打开
   HEO_INFO_CARD_TEXT3: '了解更多',
 
   // 用户技能图标
