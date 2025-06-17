@@ -45,8 +45,6 @@ const CursorDot = () => {
             clickableElements.forEach((el) => {
                 el.addEventListener('mouseenter', handleMouseEnter);
                 el.addEventListener('mouseleave', handleMouseLeave);
-                el.addEventListener('mousedown', handleMouseDown);
-                el.addEventListener('mouseup', handleMouseUp);
             });
         }, 0); // 延时 200ms 执行
 
@@ -108,9 +106,9 @@ const CursorDot = () => {
             }
   
             .cursor-dot-pressed {
-                width: 90px !important; /* 长按时进一步放大 */
-                height: 90px !important;
-                transition: width 300ms cubic-bezier(0.34, 1.56, 0.64, 1), height 300ms cubic-bezier(0.34, 1.56, 0.64, 1); /* 弹性动画 */
+                width: 180px !important; /* 长按时进一步放大 */
+                height: 180px !important;
+                transition: width 500ms cubic-bezier(0.34, 1.56, 0.64, 1), height 500ms cubic-bezier(0.34, 1.56, 0.64, 1); /* 弹性动画 */
             }
 
             .dark .cursor-dot-hover {
