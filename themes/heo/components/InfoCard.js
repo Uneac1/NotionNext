@@ -57,7 +57,7 @@ export function InfoCard(props) {
           )}
           {url2 && (
             <div className='bg-indigo-400 p-2 rounded-full w-10 items-center flex justify-center transition-colors duration-200 dark:bg-yellow-500 dark:hover:bg-black hover:bg-white'>
-              <Link href={url2}>
+              <Link href={url2} target="_blank" rel="noopener noreferrer">
                 <i className={icon2} />
               </Link>
             </div>
@@ -81,7 +81,7 @@ function MoreButton() {
     return <></>
   }
   return (
-    <Link href={url3}>
+    <Link href={url3} target="_blank" rel="noopener noreferrer">
       <div
         className={
           'group bg-indigo-400 dark:bg-yellow-500 hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white flex items-center transition-colors duration-200 py-2 px-3 rounded-full space-x-1'
