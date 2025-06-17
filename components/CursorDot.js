@@ -23,14 +23,19 @@ const CursorDot = () => {
         };
         document.addEventListener('mousemove', handleMouseMove);
 
-        // 监听鼠标悬停在可点击对象上的事件
+        // 监听鼠标悬停和按压事件
         const handleMouseEnter = () => {
             dot.classList.add('cursor-dot-hover'); // 添加放大样式
         };
         const handleMouseLeave = () => {
             dot.classList.remove('cursor-dot-hover'); // 移除放大样式
         };
-
+         const handleMouseDown = () => {
+            dot.classList.add('cursor-dot-pressed'); // 添加按压样式
+        };
+        const handleMouseUp = () => {
+            dot.classList.remove('cursor-dot-pressed'); // 移除按压样式
+        };
 
         // 为所有可点击元素和包含 hover 或 group-hover 类名的元素添加事件监听
         setTimeout(() => {
@@ -40,6 +45,8 @@ const CursorDot = () => {
             clickableElements.forEach((el) => {
                 el.addEventListener('mouseenter', handleMouseEnter);
                 el.addEventListener('mouseleave', handleMouseLeave);
+                el.addEventListener('mousedown', handleMouseDown);
+                el.addEventListener('mouseup', handleMouseUp);
             });
         }, 0); // 延时 200ms 执行
 
@@ -68,6 +75,8 @@ const CursorDot = () => {
             clickableElements.forEach((el) => {
                 el.removeEventListener('mouseenter', handleMouseEnter);
                 el.removeEventListener('mouseleave', handleMouseLeave);
+                el.removeEventListener('mousedown', handleMouseDown);
+                el.removeEventListener('mouseup', handleMouseUp);
             });
             document.body.removeChild(dot);
         };
@@ -84,7 +93,7 @@ const CursorDot = () => {
                 pointer-events: none;
                 transform: translate(-50%, -50%);
                 z-index: 9999;
-                transition: transform 100ms ease-out, width 200ms ease, height 200ms ease; /* 添加尺寸平滑过渡 */
+                 transition: transform 100ms ease-out, width 200ms ease, height 200ms ease, border 200ms ease; /* 添加尺寸和边框平滑过渡 */
                 mix-blend-mode: difference; /* 可选：增强对比度 */
             }
 
@@ -96,6 +105,12 @@ const CursorDot = () => {
                 -webkit-backdrop-filter: blur(2px); /* 毛玻璃效果 */
                 backdrop-filter: blur(2px);
                 filter: invert(1); /* 反转颜色 */
+            }
+  
+            .cursor-dot-pressed {
+                width: 90px !important; /* 长按时进一步放大 */
+                height: 90px !important;
+                transition: width 300ms cubic-bezier(0.34, 1.56, 0.64, 1), height 300ms cubic-bezier(0.34, 1.56, 0.64, 1); /* 弹性动画 */
             }
 
             .dark .cursor-dot-hover {
