@@ -23,7 +23,7 @@ const CONFIG = {
   HEO_HERO_TITLE_3: '村上龙',
   HEO_HERO_TITLE_4: 'like tears in rain',
   HEO_HERO_TITLE_5: 'All those moments will be lost in time',
-  HEO_HERO_TITLE_LINK: 'https://ows.y130.icu',
+  HEO_HERO_TITLE_LINK: 'https://ows.y130.icu/article/guide',
   // 英雄区遮罩文字
   HEO_HERO_COVER_TITLE: '随便逛逛',
 
