@@ -40,14 +40,9 @@ export async function getStaticProps(req) {
   } else if (siteConfig('POST_LIST_STYLE') === 'page') {
     props.posts = props.posts?.slice(
       0,
-      siteConfig('POSTS_PER_PAGE', 6, props?.NOTION_CONFIG)
+      siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
     )
   }
-
-  // 为搜索功能准备所有页面数据
-  props.allNavPages = props.allPages?.filter(
-    page => page.type === 'Post' && page.status === 'Published'
-  )
 
   // 预览文章内容
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
