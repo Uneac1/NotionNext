@@ -100,7 +100,7 @@ const CONFIG = {
     },
     {
       title_1: 'JS',
-      img_1: '/images/heo/2023786e7fc488f453d5fb2be760c96185c0075502.webp',
+      img_1: '/images/heo/7008.png',
       color_1: '#f7cb4f',
       title_2: 'HTML',
       img_2: '/images/heo/202372b4d760fd8a497d442140c295655426070302.webp',
