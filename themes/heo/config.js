@@ -60,7 +60,7 @@ const CONFIG = {
   HEO_GROUP_ICONS: [
     {
       title_1: 'AfterEffect',
-      img_1: '/images/heo/20239df3f66615b532ce571eac6d14ff21cf072602.webp',
+      img_1: '/images/heo/70012.png',
       color_1: '#989bf8',
       title_2: 'Sketch',
       img_2: '/images/heo/2023e0ded7b724a39f12d59c3dc8fbdc7cbe074202.webp',
@@ -76,15 +76,15 @@ const CONFIG = {
     },
     {
       title_1: 'FinalCutPro',
-      img_1: '/images/heo/20233e777652412247dd57fd9b48cf997c01070702.webp',
+      img_1: '/images/heo/70013.png',
       color_1: '#ffffff',
       title_2: 'Python',
-      img_2: '/images/heo/20235c0731cd4c0c95fc136a8db961fdf963071502.webp',
+      img_2: '/images/heo/70005.png',
       color_2: '#ffffff'
     },
     {
       title_1: 'Swift',
-      img_1: '/images/heo/202328bbee0b314297917b327df4a704db5c072402.webp',
+      img_1: '/images/heo/70011.png',
       color_1: '#eb6840',
       title_2: 'Principle',
       img_2: '/images/heo/2023f76570d2770c8e84801f7e107cd911b5073202.webp',
@@ -111,7 +111,7 @@ const CONFIG = {
       img_1: '/images/heo/2023ffa5707c4e25b6beb3e6a3d286ede4c6071102.webp',
       color_1: '#df5b40',
       title_2: 'Rhino',
-      img_2: '/images/heo/20231ca53fa0b09a3ff1df89acd7515e9516173302.webp',
+      img_2: '/images/heo/70003.png',
       color_2: '#1f1f1f'
     }
   ],
