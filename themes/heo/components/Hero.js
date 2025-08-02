@@ -133,13 +133,13 @@ function TagsGroupBar() {
               <div
                 style={{ background: g.color_1 }}
                 className={
-                  'tags-group-icon w-2 h-2 rounded-3xl flex items-center justify-center text-white text-lg font-bold shadow-md'
+                  'tags-group-icon w-28 h-28 rounded-3xl flex items-center justify-center text-white text-lg font-bold shadow-md'
                 }>
                 <LazyImage
                   priority={true}
                   src={g.img_1}
                   title={g.title_1}
-                  className='w-2/3 hidden xl:block'
+                  className='w-3/3 hidden xl:block'
                 />
               </div>
               <div
