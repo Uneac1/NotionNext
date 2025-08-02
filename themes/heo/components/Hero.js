@@ -145,7 +145,7 @@ function TagsGroupBar() {
               <div
                 style={{ background: g.color_2 }}
                 className={
-                  'tags-group-icon  mt-5 w-280 h-280 rounded-3xl flex items-center justify-center text-white text-lg font-bold shadow-md'
+                  'tags-group-icon  mt-5 w-28 h-28 rounded-3xl flex items-center justify-center text-white text-lg font-bold shadow-md'
                 }>
                 <LazyImage
                   priority={true}
