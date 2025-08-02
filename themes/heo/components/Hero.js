@@ -139,7 +139,7 @@ function TagsGroupBar() {
                   priority={true}
                   src={g.img_1}
                   title={g.title_1}
-                  className='w-2/3 hidden xl:block'
+                  className='w-4/5 hidden xl:block'
                 />
               </div>
               <div
@@ -151,7 +151,7 @@ function TagsGroupBar() {
                   priority={true}
                   src={g.img_2}
                   title={g.title_2}
-                  className='w-2/3 hidden xl:block'
+                  className='w-5/6 hidden xl:block'
                 />
               </div>
             </div>
